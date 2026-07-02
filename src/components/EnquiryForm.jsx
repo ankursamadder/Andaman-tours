@@ -10,7 +10,15 @@ const emptyForm = {
   message: "",
 };
 
-export default function EnquiryForm({ packages, selectedIds, onToggleSelect, prefill }) {
+export default function EnquiryForm({
+  packages,
+  selectedIds,
+  onToggleSelect,
+  prefill,
+  compact = false,
+  title = "Tell us your dates, we'll do the planning",
+  intro = "Fill this out and we'll send a tailored quote to your phone or email - no obligation.",
+}) {
   const [form, setForm] = useState(emptyForm);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
@@ -19,10 +27,10 @@ export default function EnquiryForm({ packages, selectedIds, onToggleSelect, pre
   const selectedPackages = packages.filter((p) => selectedIds.includes(p.id));
 
   useEffect(() => {
-    if (prefill) {
+    if (!compact && prefill) {
       document.getElementById("enquire")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }, [prefill]);
+  }, [compact, prefill]);
 
   const update = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
@@ -71,7 +79,7 @@ export default function EnquiryForm({ packages, selectedIds, onToggleSelect, pre
 
   if (submitted) {
     return (
-      <section id="enquire" className="max-w-3xl mx-auto px-6 lg:px-10 py-24 text-center">
+      <div className={compact ? "bg-white rounded-3xl border border-sand-200 shadow-sm p-6" : "max-w-3xl mx-auto px-6 lg:px-10 py-24 text-center"}>
         <div className="h-16 w-16 rounded-full bg-lagoon-50 text-lagoon-700 flex items-center justify-center mx-auto mb-6">
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
@@ -91,24 +99,28 @@ export default function EnquiryForm({ packages, selectedIds, onToggleSelect, pre
         >
           Send another enquiry
         </button>
-      </section>
+      </div>
     );
   }
 
-  return (
-    <section id="enquire" className="bg-sand-100">
-      <div className="max-w-4xl mx-auto px-6 lg:px-10 py-20 lg:py-24">
-        <p className="text-coral-500 font-semibold tracking-[0.2em] uppercase text-xs mb-3 text-center">
-          Enquire
-        </p>
-        <h2 className="font-display text-3xl sm:text-4xl text-lagoon-900 text-center text-balance">
-          Tell us your dates, we'll do the planning
-        </h2>
-        <p className="text-driftwood text-center mt-4 max-w-lg mx-auto">
-          Fill this out and we'll send a tailored quote to your phone or email - no obligation.
-        </p>
+  const body = (
+    <div className={compact ? "bg-white rounded-3xl border border-sand-200 shadow-sm p-5 sm:p-6" : "bg-white rounded-3xl shadow-sm border border-sand-200 p-6 sm:p-9 mt-10"}>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-coral-500 font-semibold tracking-[0.2em] uppercase text-xs mb-2">
+            Enquire
+          </p>
+          <h2 className={`${compact ? "text-2xl" : "text-3xl sm:text-4xl"} font-display text-lagoon-900 text-balance`}>
+            {title}
+          </h2>
+          <p className={`text-driftwood ${compact ? "mt-3 text-sm" : "text-center mt-4 max-w-lg mx-auto"}`}>
+            {intro}
+          </p>
+        </div>
+      </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-sm border border-sand-200 p-6 sm:p-9 mt-10">
+      <form onSubmit={handleSubmit} className={compact ? "mt-6 space-y-5" : "mt-10 space-y-5"}>
+        {!compact && (
           <div>
             <p className="font-semibold text-lagoon-900 text-sm mb-3">Selected packages</p>
             <div className="flex flex-wrap gap-2">
@@ -131,74 +143,84 @@ export default function EnquiryForm({ packages, selectedIds, onToggleSelect, pre
               })}
             </div>
           </div>
+        )}
 
-          <div className="grid sm:grid-cols-2 gap-5 mt-8">
-            <Field label="Full name" required>
-              <input
-                type="text"
-                value={form.name}
-                onChange={update("name")}
-                placeholder="Priya Sharma"
-                className="form-input"
-              />
-            </Field>
-            <Field label="Phone number" required>
-              <input
-                type="tel"
-                value={form.phone}
-                onChange={update("phone")}
-                placeholder="+91 98765 43210"
-                className="form-input"
-              />
-            </Field>
-            <Field label="Email address">
-              <input
-                type="email"
-                value={form.email}
-                onChange={update("email")}
-                placeholder="priya@example.com"
-                className="form-input"
-              />
-            </Field>
-            <Field label="Number of travelers">
-              <select value={form.travelers} onChange={update("travelers")} className="form-input">
-                {["1", "2", "3", "4", "5", "6+"].map((n) => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <Field label="Preferred travel month" full>
-              <input
-                type="month"
-                value={form.travelMonth}
-                onChange={update("travelMonth")}
-                className="form-input"
-              />
-            </Field>
-            <Field label="Anything else we should know?" full>
-              <textarea
-                value={form.message}
-                onChange={update("message")}
-                rows={4}
-                placeholder="E.g. celebrating our anniversary, need a wheelchair-accessible stay, traveling with kids..."
-                className="form-input resize-none"
-              />
-            </Field>
-          </div>
+        <div className="grid sm:grid-cols-2 gap-5">
+          <Field label="Full name" required>
+            <input
+              type="text"
+              value={form.name}
+              onChange={update("name")}
+              placeholder="Priya Sharma"
+              className="form-input"
+            />
+          </Field>
+          <Field label="Phone number" required>
+            <input
+              type="tel"
+              value={form.phone}
+              onChange={update("phone")}
+              placeholder="+91 98765 43210"
+              className="form-input"
+            />
+          </Field>
+          <Field label="Email address">
+            <input
+              type="email"
+              value={form.email}
+              onChange={update("email")}
+              placeholder="priya@example.com"
+              className="form-input"
+            />
+          </Field>
+          <Field label="Number of travelers">
+            <select value={form.travelers} onChange={update("travelers")} className="form-input">
+              {["1", "2", "3", "4", "5", "6+"].map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Preferred travel month" full>
+            <input
+              type="month"
+              value={form.travelMonth}
+              onChange={update("travelMonth")}
+              className="form-input"
+            />
+          </Field>
+          <Field label="Anything else we should know?" full>
+            <textarea
+              value={form.message}
+              onChange={update("message")}
+              rows={4}
+              placeholder="E.g. celebrating our anniversary, need a wheelchair-accessible stay, traveling with kids..."
+              className="form-input resize-none"
+            />
+          </Field>
+        </div>
 
-          {error && <p className="text-coral-600 text-sm mt-4">{error}</p>}
+        {error && <p className="text-coral-600 text-sm">{error}</p>}
 
-          <button
-            type="submit"
-            disabled={saving}
-            className="mt-8 w-full sm:w-auto rounded-full bg-coral-500 hover:bg-coral-600 disabled:opacity-60 text-white font-semibold px-8 py-3.5 transition-colors"
-          >
-            {saving ? "Sending..." : "Send Enquiry"}
-          </button>
-        </form>
-      </div>
+        <button
+          type="submit"
+          disabled={saving}
+          className="w-full rounded-full bg-coral-500 hover:bg-coral-600 disabled:opacity-60 text-white font-semibold px-8 py-3.5 transition-colors"
+        >
+          {saving ? "Sending..." : "Send Enquiry"}
+        </button>
+      </form>
+    </div>
+  );
+
+  if (compact) {
+    return body;
+  }
+
+  return (
+    <section id="enquire" className="bg-sand-100">
+      <div className="max-w-4xl mx-auto px-6 lg:px-10 py-20 lg:py-24">{body}</div>
     </section>
   );
 }
