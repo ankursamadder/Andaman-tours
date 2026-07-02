@@ -6,23 +6,31 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [authModalOpen, setAuthModalOpen] = useState(false);
-  const adminEmails = (import.meta.env.VITE_ADMIN_EMAILS ?? "")
-    .split(",")
-    .map((email) => email.trim().toLowerCase())
-    .filter(Boolean);
+
+  const refreshAdminStatus = async () => {
+    const { data, error } = await supabase.rpc("is_admin");
+    if (!error) {
+      setIsAdmin(Boolean(data));
+    } else {
+      setIsAdmin(false);
+    }
+  };
 
   useEffect(() => {
     // Pick up any existing session on first load (e.g. page refresh).
-    supabase.auth.getSession().then(({ data }) => {
+    supabase.auth.getSession().then(async ({ data }) => {
       setUser(data.session?.user ?? null);
+      await refreshAdminStatus();
       setLoading(false);
     });
 
     // Keep the user in sync whenever they sign in, sign out, or the token refreshes.
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: listener } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setUser(session?.user ?? null);
+      await refreshAdminStatus();
     });
 
     return () => listener.subscription.unsubscribe();
@@ -40,10 +48,10 @@ export function AuthProvider({ children }) {
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    setIsAdmin(false);
   };
 
   const displayName = user?.email ? displayNameFromEmail(user.email) : "";
-  const isAdmin = Boolean(user?.email && adminEmails.includes(user.email.toLowerCase()));
 
   return (
     <AuthContext.Provider
