@@ -1,0 +1,7 @@
+.env
+.env.*
+.npm-cache/
+node_modules/
+dist/
+.vite/
+supabase/.temp/

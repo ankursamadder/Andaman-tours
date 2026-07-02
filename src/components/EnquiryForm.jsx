@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { supabase } from "../lib/supabaseClient.js";
 
 const emptyForm = {
   name: "",
@@ -13,6 +14,7 @@ export default function EnquiryForm({ packages, selectedIds, onToggleSelect, pre
   const [form, setForm] = useState(emptyForm);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
 
   const selectedPackages = packages.filter((p) => selectedIds.includes(p.id));
 
@@ -24,27 +26,56 @@ export default function EnquiryForm({ packages, selectedIds, onToggleSelect, pre
 
   const update = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!form.name.trim() || !form.phone.trim()) {
       setError("Please share your name and phone number so we can reach you.");
       return;
     }
+
     if (selectedPackages.length === 0) {
       setError("Select at least one package above to include in your enquiry.");
       return;
     }
+
     setError("");
-    // No backend is wired up yet — this simply confirms receipt in the UI.
-    // Replace this block with a fetch() call to your enquiry API / email service.
-    setSubmitted(true);
+    setSaving(true);
+
+    const payload = {
+      name: form.name.trim(),
+      phone: form.phone.trim(),
+      email: form.email.trim() || null,
+      travelers: form.travelers,
+      travel_month: form.travelMonth || null,
+      message: form.message.trim() || null,
+      selected_package_ids: selectedPackages.map((pkg) => pkg.id),
+      selected_package_names: selectedPackages.map((pkg) => pkg.name),
+    };
+
+    try {
+      const { error: submitError } = await supabase.from("enquiries").insert(payload);
+
+      if (submitError) {
+        setError(submitError.message);
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setError("We could not save your enquiry right now. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (submitted) {
     return (
       <section id="enquire" className="max-w-3xl mx-auto px-6 lg:px-10 py-24 text-center">
         <div className="h-16 w-16 rounded-full bg-lagoon-50 text-lagoon-700 flex items-center justify-center mx-auto mb-6">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </div>
         <h2 className="font-display text-3xl text-lagoon-900 mb-3">Enquiry received</h2>
         <p className="text-driftwood max-w-md mx-auto">
@@ -67,12 +98,14 @@ export default function EnquiryForm({ packages, selectedIds, onToggleSelect, pre
   return (
     <section id="enquire" className="bg-sand-100">
       <div className="max-w-4xl mx-auto px-6 lg:px-10 py-20 lg:py-24">
-        <p className="text-coral-500 font-semibold tracking-[0.2em] uppercase text-xs mb-3 text-center">Enquire</p>
+        <p className="text-coral-500 font-semibold tracking-[0.2em] uppercase text-xs mb-3 text-center">
+          Enquire
+        </p>
         <h2 className="font-display text-3xl sm:text-4xl text-lagoon-900 text-center text-balance">
           Tell us your dates, we'll do the planning
         </h2>
         <p className="text-driftwood text-center mt-4 max-w-lg mx-auto">
-          Fill this out and we'll send a tailored quote to your phone or email — no obligation.
+          Fill this out and we'll send a tailored quote to your phone or email - no obligation.
         </p>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-sm border border-sand-200 p-6 sm:p-9 mt-10">
@@ -130,7 +163,9 @@ export default function EnquiryForm({ packages, selectedIds, onToggleSelect, pre
             <Field label="Number of travelers">
               <select value={form.travelers} onChange={update("travelers")} className="form-input">
                 {["1", "2", "3", "4", "5", "6+"].map((n) => (
-                  <option key={n} value={n}>{n}</option>
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
                 ))}
               </select>
             </Field>
@@ -157,9 +192,10 @@ export default function EnquiryForm({ packages, selectedIds, onToggleSelect, pre
 
           <button
             type="submit"
-            className="mt-8 w-full sm:w-auto rounded-full bg-coral-500 hover:bg-coral-600 text-white font-semibold px-8 py-3.5 transition-colors"
+            disabled={saving}
+            className="mt-8 w-full sm:w-auto rounded-full bg-coral-500 hover:bg-coral-600 disabled:opacity-60 text-white font-semibold px-8 py-3.5 transition-colors"
           >
-            Send Enquiry
+            {saving ? "Sending..." : "Send Enquiry"}
           </button>
         </form>
       </div>

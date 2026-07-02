@@ -7,6 +7,7 @@ import WhyUs from "./components/WhyUs.jsx";
 import Gallery from "./components/Gallery.jsx";
 import EnquiryForm from "./components/EnquiryForm.jsx";
 import Footer from "./components/Footer.jsx";
+import AuthModal from "./components/AuthModal.jsx";
 import packages from "./data/packages.js";
 
 export default function App() {
@@ -49,6 +50,7 @@ export default function App() {
         onClose={() => setActivePkg(null)}
         onEnquire={handleEnquireFromModal}
       />
+      <AuthModal />
     </div>
   );
 }
