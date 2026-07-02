@@ -1,9 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import EnquiryForm from "./EnquiryForm.jsx";
 
-export default function ItineraryModal({ pkg, onClose, onEnquire }) {
-  const enquiryRef = useRef(null);
-
+export default function ItineraryModal({ pkg, onClose }) {
   useEffect(() => {
     if (!pkg) return;
     const onKey = (e) => e.key === "Escape" && onClose();
@@ -129,24 +127,17 @@ export default function ItineraryModal({ pkg, onClose, onEnquire }) {
                   <span className="font-display text-2xl text-lagoon-700">Rs. {pkg.price.toLocaleString("en-IN")}</span>
                   <span className="text-xs text-driftwood"> {pkg.priceUnit}</span>
                 </div>
-                <button
-                  onClick={() => {
-                    onEnquire(pkg);
-                    enquiryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                  }}
-                  className="rounded-full bg-coral-500 hover:bg-coral-600 text-white font-semibold px-6 py-3 transition-colors"
-                >
-                  Enquire About This Package
-                </button>
+                <span className="text-sm font-medium text-lagoon-700">Quote form is ready beside this itinerary</span>
               </div>
             </div>
 
-            <div ref={enquiryRef} className="lg:sticky lg:top-6 self-start">
+            <div className="lg:sticky lg:top-6 self-start">
               <EnquiryForm
                 packages={[pkg]}
                 selectedIds={[pkg.id]}
                 compact
-                title={`Enquire about ${pkg.name}`}
+                resetKey={pkg.id}
+                title={`Request a quote for ${pkg.name}`}
                 intro="Share your details and we'll send a tailored quote for this package."
               />
             </div>

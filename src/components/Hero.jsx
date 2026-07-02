@@ -19,7 +19,7 @@ export default function Hero() {
           Islands worth crossing an ocean for.
         </h1>
         <p className="text-sand-100/90 text-base sm:text-lg mt-6 max-w-xl">
-          Handpicked tour packages across Port Blair, Havelock and Neil Island — beaches,
+          Handpicked tour packages across Port Blair, Havelock and Neil Island - beaches,
           scuba reefs and honeymoon hideaways, mapped out day by day.
         </p>
         <div className="mt-9 flex flex-wrap gap-4">
@@ -29,16 +29,9 @@ export default function Hero() {
           >
             Browse Packages
           </a>
-          <a
-            href="#enquire"
-            className="rounded-full border border-white/60 text-white hover:bg-white/10 font-semibold px-7 py-3.5 transition-colors"
-          >
-            Send an Enquiry
-          </a>
         </div>
       </div>
 
-      {/* signature wave divider */}
       <svg
         className="absolute bottom-0 left-0 w-full text-sand-50"
         viewBox="0 0 1440 90"

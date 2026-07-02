@@ -1,6 +1,9 @@
 import React from "react";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Footer() {
+  const { isAdmin } = useAuth();
+
   return (
     <footer className="bg-lagoon-900 text-sand-100/80">
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-14 grid sm:grid-cols-3 gap-10">
@@ -25,7 +28,13 @@ export default function Footer() {
           <ul className="space-y-2 text-sm">
             <li><a href="#packages" className="hover:text-white transition-colors">Packages</a></li>
             <li><a href="#gallery" className="hover:text-white transition-colors">Gallery</a></li>
-            <li><a href="#enquire" className="hover:text-white transition-colors">Send an Enquiry</a></li>
+            {isAdmin && (
+              <li>
+                <a href="/admin" className="hover:text-white transition-colors">
+                  Admin Portal
+                </a>
+              </li>
+            )}
           </ul>
         </div>
       </div>

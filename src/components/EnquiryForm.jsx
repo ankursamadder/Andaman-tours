@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient.js";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const emptyForm = {
   name: "",
@@ -16,9 +17,11 @@ export default function EnquiryForm({
   onToggleSelect,
   prefill,
   compact = false,
+  resetKey,
   title = "Tell us your dates, we'll do the planning",
   intro = "Fill this out and we'll send a tailored quote to your phone or email - no obligation.",
 }) {
+  const { user, displayName } = useAuth();
   const [form, setForm] = useState(emptyForm);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
@@ -31,6 +34,22 @@ export default function EnquiryForm({
       document.getElementById("enquire")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, [compact, prefill]);
+
+  useEffect(() => {
+    setForm(emptyForm);
+    setSubmitted(false);
+    setError("");
+    setSaving(false);
+  }, [resetKey]);
+
+  useEffect(() => {
+    if (!user?.email) return;
+    setForm((current) => ({
+      ...current,
+      name: current.name || displayName || "",
+      email: current.email || user.email || "",
+    }));
+  }, [user?.email, displayName]);
 
   const update = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
@@ -108,7 +127,7 @@ export default function EnquiryForm({
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-coral-500 font-semibold tracking-[0.2em] uppercase text-xs mb-2">
-            Enquire
+            Quote Request
           </p>
           <h2 className={`${compact ? "text-2xl" : "text-3xl sm:text-4xl"} font-display text-lagoon-900 text-balance`}>
             {title}
@@ -208,7 +227,7 @@ export default function EnquiryForm({
           disabled={saving}
           className="w-full rounded-full bg-coral-500 hover:bg-coral-600 disabled:opacity-60 text-white font-semibold px-8 py-3.5 transition-colors"
         >
-          {saving ? "Sending..." : "Send Enquiry"}
+          {saving ? "Sending..." : "Request Quote"}
         </button>
       </form>
     </div>

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient.js";
+import { displayNameFromEmail } from "../lib/contentHelpers.js";
 
 const AuthContext = createContext(null);
 
@@ -7,6 +8,10 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const adminEmails = (import.meta.env.VITE_ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
 
   useEffect(() => {
     // Pick up any existing session on first load (e.g. page refresh).
@@ -37,11 +42,16 @@ export function AuthProvider({ children }) {
     await supabase.auth.signOut();
   };
 
+  const displayName = user?.email ? displayNameFromEmail(user.email) : "";
+  const isAdmin = Boolean(user?.email && adminEmails.includes(user.email.toLowerCase()));
+
   return (
     <AuthContext.Provider
       value={{
         user,
         loading,
+        displayName,
+        isAdmin,
         signUp,
         signIn,
         signOut,
