@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #FBF7EF;
+}
+
+/* Signature "voyage route" dashed line used in the itinerary timeline */
+.route-line {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    #1E8C7F 0,
+    #1E8C7F 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  width: 2px;
+}
+
+::selection {
+  background: #FF7A59;
+  color: #FBF7EF;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.form-input {
+  @apply w-full rounded-xl border border-sand-200 bg-sand-50 px-4 py-3 text-sm text-lagoon-900 placeholder:text-lagoon-900/40 focus:outline-none focus:ring-2 focus:ring-lagoon-400 focus:border-transparent transition-shadow;
+}
