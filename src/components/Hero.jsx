@@ -19,15 +19,15 @@ export default function Hero() {
           Islands worth crossing an ocean for.
         </h1>
         <p className="text-sand-100/90 text-base sm:text-lg mt-6 max-w-xl">
-          Handpicked tour packages across Port Blair, Havelock and Neil Island - beaches,
-          scuba reefs and honeymoon hideaways, mapped out day by day.
+          Handpicked activities across Port Blair, Havelock and Neil Island - scuba dives,
+          kayaking, cab rides, photoshoots and dinner cruises, all ready to book.
         </p>
         <div className="mt-9 flex flex-wrap gap-4">
           <a
             href="#packages"
             className="rounded-full bg-coral-500 hover:bg-coral-600 text-white font-semibold px-7 py-3.5 transition-colors"
           >
-            Browse Packages
+            Browse Activities
           </a>
         </div>
       </div>

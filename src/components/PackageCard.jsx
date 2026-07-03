@@ -6,7 +6,7 @@ export default function PackageCard({ pkg, onView, selected, onToggleSelect }) {
       <div className="relative h-56 overflow-hidden">
         <img
           src={pkg.cover}
-          alt={`${pkg.name} — ${pkg.places.join(", ")}`}
+          alt={`${pkg.name} - ${pkg.places.join(", ")}`}
           loading="lazy"
           className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
@@ -16,7 +16,7 @@ export default function PackageCard({ pkg, onView, selected, onToggleSelect }) {
         <button
           onClick={() => onToggleSelect(pkg.id)}
           aria-pressed={selected}
-          title="Add to enquiry"
+          title="Add to shortlist"
           className={`absolute top-3 right-3 h-9 w-9 rounded-full flex items-center justify-center transition-colors ${
             selected ? "bg-coral-500 text-white" : "bg-white/85 text-lagoon-700 hover:bg-white"
           }`}
@@ -31,7 +31,9 @@ export default function PackageCard({ pkg, onView, selected, onToggleSelect }) {
         <div className="flex items-start justify-between gap-3">
           <h3 className="font-display text-lg text-lagoon-900 leading-snug">{pkg.name}</h3>
           <div className="flex items-center gap-1 text-xs text-driftwood shrink-0 mt-1">
-            <svg width="13" height="13" viewBox="0 0 20 20" fill="#FF7A59"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.3L10 15l-5.6 3.1 1.4-6.3L1 7.5l6.4-.6z" /></svg>
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="#FF7A59">
+              <path d="M10 1l2.6 5.9 6.4.6-4.8 4.3 1.4 6.3L10 15l-5.6 3.1 1.4-6.3L1 7.5l6.4-.6z" />
+            </svg>
             <span className="font-medium text-lagoon-700">{pkg.rating}</span>
             <span>({pkg.reviews})</span>
           </div>
@@ -40,12 +42,18 @@ export default function PackageCard({ pkg, onView, selected, onToggleSelect }) {
         <p className="text-driftwood text-sm mt-1">{pkg.tagline}</p>
 
         <div className="flex items-center gap-2 text-xs text-lagoon-600 mt-3">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s7-6.3 7-12A7 7 0 0 0 5 10c0 5.7 7 12 7 12z" /><circle cx="12" cy="10" r="2.5" /></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M12 22s7-6.3 7-12A7 7 0 0 0 5 10c0 5.7 7 12 7 12z" />
+            <circle cx="12" cy="10" r="2.5" />
+          </svg>
           <span>{pkg.places.join(" · ")}</span>
         </div>
 
         <div className="flex items-center gap-2 text-xs text-lagoon-600 mt-1.5">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18M8 3v4M16 3v4" /></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <rect x="3" y="5" width="18" height="16" rx="2" />
+            <path d="M3 10h18M8 3v4M16 3v4" />
+          </svg>
           <span>{pkg.duration}</span>
         </div>
 
@@ -59,7 +67,7 @@ export default function PackageCard({ pkg, onView, selected, onToggleSelect }) {
             onClick={() => onView(pkg)}
             className="rounded-full bg-lagoon-700 hover:bg-lagoon-600 text-white text-sm font-semibold px-4 py-2.5 transition-colors"
           >
-            View Itinerary
+            View Activity
           </button>
         </div>
       </div>

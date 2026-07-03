@@ -2,7 +2,8 @@ import React from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Footer() {
-  const { isAdmin } = useAuth();
+  const { user, isAdmin } = useAuth();
+  const showAdminPortal = Boolean(user || isAdmin);
 
   return (
     <footer className="bg-lagoon-900 text-sand-100/80">
@@ -10,7 +11,7 @@ export default function Footer() {
         <div>
           <span className="font-display text-xl text-white">Andaman Voyages</span>
           <p className="text-sm mt-3 max-w-xs">
-            Locally planned tour packages across Port Blair, Havelock and Neil Island.
+            Locally planned activities across Port Blair, Havelock and Neil Island.
           </p>
         </div>
 
@@ -26,9 +27,17 @@ export default function Footer() {
         <div>
           <p className="text-white font-semibold text-sm mb-3">Quick links</p>
           <ul className="space-y-2 text-sm">
-            <li><a href="#packages" className="hover:text-white transition-colors">Packages</a></li>
-            <li><a href="#gallery" className="hover:text-white transition-colors">Gallery</a></li>
-            {isAdmin && (
+            <li>
+              <a href="#packages" className="hover:text-white transition-colors">
+                Activities
+              </a>
+            </li>
+            <li>
+              <a href="#gallery" className="hover:text-white transition-colors">
+                Gallery
+              </a>
+            </li>
+            {showAdminPortal && (
               <li>
                 <a href="/admin" className="hover:text-white transition-colors">
                   Admin Portal
@@ -39,7 +48,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10 py-5 text-center text-xs">
-        © {new Date().getFullYear()} Andaman Voyages. All rights reserved.
+        &copy; {new Date().getFullYear()} Andaman Voyages. All rights reserved.
       </div>
     </footer>
   );

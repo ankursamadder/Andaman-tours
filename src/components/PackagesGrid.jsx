@@ -10,12 +10,12 @@ export default function PackagesGrid({ packages, onView, selectedIds, onToggleSe
   return (
     <section id="packages" className="max-w-7xl mx-auto px-6 lg:px-10 py-20 lg:py-28">
       <div className="max-w-2xl">
-        <p className="text-coral-500 font-semibold tracking-[0.2em] uppercase text-xs mb-3">Tour Packages</p>
+        <p className="text-coral-500 font-semibold tracking-[0.2em] uppercase text-xs mb-3">Activities</p>
         <h2 className="font-display text-3xl sm:text-4xl text-lagoon-900 text-balance">
-          Pick a route through the islands
+          Pick the activity that fits your trip
         </h2>
         <p className="text-driftwood mt-4">
-          Every package covers stays, transfers and a day-by-day plan. Tap the heart to shortlist
+          Every activity shows its options, inclusions and what to expect. Tap the heart to shortlist
           a few, then send one enquiry for all of them.
         </p>
       </div>

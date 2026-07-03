@@ -13,7 +13,7 @@ export default function Navbar() {
   }, []);
 
   const links = [
-    { label: "Packages", href: "#packages" },
+    { label: "Activities", href: "#packages" },
     { label: "Why Us", href: "#why-us" },
     { label: "Gallery", href: "#gallery" },
   ];
@@ -69,7 +69,7 @@ export default function Navbar() {
             href="#packages"
             className="rounded-full bg-coral-500 hover:bg-coral-600 text-white text-sm font-semibold px-5 py-2.5 transition-colors"
           >
-            Browse Packages
+            Browse Activities
           </a>
         </div>
 
@@ -143,7 +143,7 @@ export default function Navbar() {
             onClick={() => setOpen(false)}
             className="rounded-full border border-lagoon-700 text-lagoon-700 text-sm font-semibold px-5 py-2.5 text-center"
           >
-            Browse Packages
+            Browse Activities
           </a>
         </div>
       )}

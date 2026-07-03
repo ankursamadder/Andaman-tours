@@ -89,7 +89,7 @@ export default function AuthModal() {
         </h2>
         <p className="text-driftwood text-sm mb-6">
           {mode === "signin"
-            ? "Sign in to track your enquiries and shortlisted packages."
+            ? "Sign in to track your enquiries and shortlisted activities."
             : "Save your shortlist and enquiries across visits."}
         </p>
 
